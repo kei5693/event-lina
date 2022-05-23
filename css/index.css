@@ -1,0 +1,59 @@
+﻿@charset "utf-8";
+
+#quizContainer {
+  padding: 10px;
+  font-size: 20px;
+}
+#quizContainer button {
+  display: block;
+  width: 100%;
+  height: 40px;
+  font-size: 20px;
+  border: 1px solid #000;
+  border-radius: 5px;
+}
+#quizContainer > .quizArea {
+  position: relative;
+}
+#quizContainer > .quizArea h2 {
+  margin-top: 10px;
+  font-size: 20px;
+}
+#quizContainer > .quizArea ul {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+  min-height: 90px;
+}
+#quizContainer > .quizArea ul > li.selected button {
+  background-color: red;
+  color: #fff;
+}
+#quizContainer > .btnArea {
+  margin-top: 10px;
+}
+#quizContainer > .btnArea > div {
+  overflow: hidden;
+}
+#quizContainer > .btnArea > div button {
+  width: 100px;
+}
+#quizContainer > .btnArea > div .btnPrev {
+  float: left;
+}
+#quizContainer > .btnArea > div .btnNext {
+  float: right;
+}
+#quizContainer.result .quizArea,
+#quizContainer.result .btnArea,
+#quizContainer > .resultArea {
+  display: none;
+}
+#quizContainer > .resultArea,
+#quizContainer > .resultArea button {
+  margin-top: 10px;
+}
+#quizContainer.result > .resultArea {
+  display: block;
+}

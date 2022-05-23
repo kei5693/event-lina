@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Document</title>
+  <style>
+    /* TYPE, COMMON */
+    body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,form,fieldset,p,button,input{margin:0;padding:0;box-sizing: border-box;word-break: keep-all;}
+    body,h1,h2,h3,h4,h5,h6,input,textarea,select,option{color:#000; font-family: '맑은고딕',Malgun Gothic,'돋움',dotum,helvetica,sans-serif;font-size:12px;line-height:1.4;}
+    img,fieldset,iframe{border:0}
+    ul, ol {list-style:none}
+    img,a,input,select,button{vertical-align:top}
+    em,address,dfn,cite{font-style:normal}
+    a{color:#000;text-decoration:none;-webkit-tap-highlight-color: transparent;}
+    a:hover{color:#000;text-decoration:none}
+    label,button{cursor:pointer}
+    /* FORM */
+    legend{display:block;overflow:hidden;position:absolute;top:-1000em;left:0}
+    /* TABLE */
+    table{border-spacing:0;border-collapse:collapse;width:100%;}
+    table,th,td{color:#000;font-family:'돋움',dotum,helvetica,sans-serif; font-size:12px;}
+    caption{width:0; height:0; font-size:0; line-height:0; overflow:hidden; visibility:hidden;}
+
+    *, *::before, *::after {box-sizing: border-box;}
+    :root {
+      --hue-neutral: 200;
+      --hue-wrong: 0;
+      --hue-correct: 145;
+    }
+    body {
+      --hue: var(--hue-neutral);
+      padding: 0;
+      margin: 0;
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      background-color: hsl(var(--hue), 100%, 20%);
+    }
+    body.correct {
+      --hue: var(--hue-correct);
+    }
+    body.wrong {
+      --hue: var(--hue-wrong);
+    }
+    .container {
+      width: 800px;
+      max-width: 80%;
+      background-color: white;
+      border-radius: 5px;
+      padding: 10px;
+      box-shadow: 0 0 10px 2px;
+    }
+    .btn-grid {
+      display: grid;
+      grid-template-columns: repeat(2, auto);
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .btn {
+      --hue: var(--hue-neutral);
+      border: 1px solid hsl(var(--hue), 100%, 30%);
+      background-color: hsl(var(--hue), 100%, 50%);
+      border-radius: 5px;
+      padding: 5px 10px;
+      color: white;
+      outline: none;
+    }
+    .btn:hover {
+      border-color: black;
+    }
+    .btn.correct {
+      --hue: var(--hue-correct);
+      color: black;
+    }
+    .btn.wrong {
+      --hue: var(--hue-wrong);
+    }
+    .start-btn, .next-btn {
+      font-size: 1.5rem;
+      font-weight: bold;
+      padding: 10px 20px;
+    }
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+			min-height: 50px;
+    }
+    .hide {
+      display: none;
+    }
+    html {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #DFDFDF;
+    }
+    .side-links {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+    }
+    .side-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      margin-bottom: 10px;
+      color: white;
+      width: 180px;
+      padding: 10px 0;
+      border-radius: 10px;
+    }
+    .side-link-youtube {
+      background-color: red;
+    }
+    .side-link-twitter {
+      background-color: #1DA1F2;
+    }
+    .side-link-github {
+      background-color: #6e5494;
+    }
+    .side-link-text {
+      margin-left: 10px;
+      font-size: 18px;
+    }
+    .side-link-icon {
+      color: white;
+      font-size: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="question-container" class="hide">
+      <div id="question">Question</div>
+      <div id="answer-buttons" class="btn-grid">
+        <button class="btn">Answer 1</button>
+        <button class="btn">Answer 2</button>
+        <button class="btn">Answer 3</button>
+        <button class="btn">Answer 4</button>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="start-btn" class="start-btn btn">Start</button>
+      <button id="next-btn" class="next-btn btn hide">Next</button>
+    </div>
+  </div>
+
+  <script>
+		const questionContainerElement  = document.getElementById('question-container');  // 
+		const questionElement           = document.getElementById('question');            // 
+		const answerButtonsElement      = document.getElementById('answer-buttons');      // 
+		const startButton               = document.getElementById('start-btn');           // 
+		const nextButton                = document.getElementById('next-btn');            // 
+
+		let shuffledQuestions,
+        currentQuestionIndex;
+    
+    const questions = [
+			{
+				question: 'What is 2 + 2?',
+				answers: [
+					{ text: '4', correct: true },
+					{ text: '22', correct: false }
+				]
+			},
+			{
+				question: 'Who is the best YouTuber?',
+				answers: [
+					{ text: 'Web Dev Simplified', correct: true },
+					{ text: 'Traversy Media', correct: true },
+					{ text: 'Dev Ed', correct: true },
+					{ text: 'Fun Fun Function', correct: true }
+				]
+			},
+			{
+				question: 'Is web development fun?',
+				answers: [
+					{ text: 'Kinda', correct: false },
+					{ text: 'YES!!!', correct: true },
+					{ text: 'Um no', correct: false },
+					{ text: 'IDK', correct: false }
+				]
+			},
+			{
+				question: 'What is 4 * 2?',
+				answers: [
+					{ text: '6', correct: false },
+					{ text: '8', correct: true }
+				]
+			}
+		];
+
+    // start 이벤트
+		startButton.addEventListener('click', startGame);
+		// next 이벤트
+		nextButton.addEventListener('click', () => {
+			currentQuestionIndex++;	// 현재 질문 인덱스 + 1
+			setNextQuestion();			// 다음 질문 함수
+		});
+
+		function startGame() {
+			startButton.classList.add('hide');															// start 버튼 숨김
+			shuffledQuestions = questions.sort(() => Math.random() - 0.5);	// 데이터 셔플
+			//shuffledQuestions = shuffle(questions);
+			currentQuestionIndex = 0;																				// 현재 인덱스 0
+			questionContainerElement.classList.remove('hide');							// 질문, 선택지 영역 show
+			setNextQuestion();																							// 다음 질문 함수
+		}
+
+    // Math.random() 은 랜덤 구현에 편차가 있어서 편차가 덜한 함수
+    function shuffle(array) {;
+      for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array
+    }
+    
+		function setNextQuestion() {
+      resetState();
+			showQuestion(shuffledQuestions[currentQuestionIndex]);					// next 이벤트로 currentQuestionIndex++ 증가된 인덱스의 데이터를 전달
+		}
+
+		function resetState() {
+			clearStatusClass(document.body);		// body의 정,오답 class 제거
+			nextButton.classList.add('hide');		// next 버튼 숨김
+			// 대상의 모든 자식을 제거
+			while (answerButtonsElement.firstChild) {
+				answerButtonsElement.removeChild(answerButtonsElement.firstChild);
+			}
+		}
+
+		// 매개변수 데이터에 맞는 질문을 보여주는 함수
+		function showQuestion(question) {
+			questionElement.innerText = question.question;									// 매개변수로 받은 데이터의 question으로 질문 태그의 값을 변경
+			// 매개변수로 받은 데이터의 answer로 반복문
+			question.answers.forEach(answer => {
+				const button = document.createElement('button');							// button 태그 생성
+				button.innerText = answer.text;																// 생성한 button에 text값 전달
+				button.classList.add('btn');																	// 생성한 button에 class 추가
+				// answer.correct 값이 true면 해당 버튼 dataset에 true 전달 <button class="btn" data-correct="true">4</button>
+				if (answer.correct) {
+					button.dataset.correct = answer.correct;
+				}
+				button.addEventListener('click', selectAnswer);								// 답변 선택 함수
+				answerButtonsElement.appendChild(button);											// 생성한 답변을 답변 영역태그에 추가
+			});
+		}
+
+		// 답변 선택 함수
+		function selectAnswer(e) {
+			const selectedButton = e.target;
+			const correct = selectedButton.dataset.correct;									// 선택한 질문의 dataset.correct 값을 저장
+			setStatusClass(document.body, correct);													// body의 정,오답에 맞는 class추가
+			Array.from(answerButtonsElement.children).forEach(button => {		// 답변 버튼의 dataset에 맞춰서 정,오답에 맞는 class추가
+				setStatusClass(button, button.dataset.correct);
+			});
+
+			console.log(shuffledQuestions.length, currentQuestionIndex + 1);
+
+			if (shuffledQuestions.length > currentQuestionIndex + 1) {			// 데이터의 숫자 > 현재 질문 인덱스+1 : 마지막 질문 전까지
+				nextButton.classList.remove('hide');													// next 버튼 숨김
+			} else {
+				startButton.innerText = 'Restart';														// 마지막 질문일 경우 start 버튼 텍스트 변경 후 보여줌
+				startButton.classList.remove('hide');
+			}
+		}
+
+		// 매개변수 대상의 dataset을 기준으로 정,오답에 맞는 class추가
+		function setStatusClass(element, correct) {
+			clearStatusClass(element);																			// 매개변수 대상의 정,오답 class 제거
+			if (correct) {
+				element.classList.add('correct');
+			} else {
+				element.classList.add('wrong');
+			}
+		}
+
+		/**
+		 * body의 정,오답 class 제거
+		 */
+		function clearStatusClass(element) {
+			element.classList.remove('correct');
+			element.classList.remove('wrong');
+		}
+  </script>
+</body>
+</html>
