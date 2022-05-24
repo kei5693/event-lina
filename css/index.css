@@ -54,6 +54,9 @@
 #quizContainer > .resultArea button {
   margin-top: 10px;
 }
+#quizContainer.start > .btnArea > div .btnPrev{
+  display: none;
+}
 #quizContainer.result > .resultArea {
   display: block;
 }

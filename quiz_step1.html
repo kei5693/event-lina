@@ -78,41 +78,25 @@
 
 		var quiz = {
 			init(){
-				quiz.flowControll(currentIndex);
-				quiz.setQuestion(currentIndex);
+				quiz.showQuestion(currentIndex);
 				quiz.btnEvent();
 			},
 			resetQuiz(){
 				currentIndex = 0;
 				resultArr	= [];
-				quiz.setQuestion(currentIndex);
-				quizContainer.classList.remove('result');
-			},
-			setQuestion(index){
-				quiz.flowControll(index);
-				quiz.showQuestion(index);
-			},
-			flowControll(index){
-				// 버튼 클릭 시 제어
-				if (index < 0) {
-					index = 0;
-				} else if (index == lastIndex) {
-					quizContainer.classList.add('result');
-					quiz.showResult(resultArr);
-				}
-
-				// 인덱스 변경 시 제어
-				if (index == 0) {
-					quizContainer.classList.add('start');
-				} else if (index < lastIndex) {
-					quizContainer.classList.remove('start');
-				}
+				quiz.showQuestion(currentIndex);
 			},
 			showQuestion(index){
-				if (index > lastIndex - 1) {
-					index = lastIndex - 1;
+				if (index == 0) {
+					quizContainer.classList = 'start';
+				} else if (index == lastIndex) {
+					quizContainer.classList = 'result';
+					quiz.showResult(resultArr);
+				} else {
+					quizContainer.classList = '';
 				}
 
+				console.log(index, lastIndex);
 				if(questions[index] == undefined) {
 					return console.log('질문 번호 오류');
 				}
@@ -122,7 +106,6 @@
 					quizAnswer.removeChild(quizAnswer.firstChild);
 				}
 
-				// 현재 질문 순서 표시
 				let status = `<strong>${index+1}</strong> / <strong>${lastIndex}</strong>`
 				quizIndex.innerHTML = status;
 				
@@ -142,29 +125,33 @@
 				let targetSiblings = answer.closest('ul').children;
 				Array.from(targetSiblings).forEach(el => el.classList.remove('selected'));
 				targetSiblings[index].classList.add('selected');
-
 				selectedAnswer = index;
-
 			},
 			answerQuiz(target){			
-				// 이전, 다음 어느 버튼을 눌렀는가?
 				let quizDirection = target.className;
 				let currentAnswer = questions[currentIndex];
 				
-				console.log(questions[currentIndex].answers[selectedAnswer].correct);
+				//console.log(questions[currentIndex].answers[selectedAnswer].correct);
 
-				// if(quizDirection == 'btnNext'){
-				// 	if(currentAnswer != undefined && resultArr.length <= lastIndex-1){
-				// 		resultArr.push(currentAnswer);
-				// 		currentIndex++;
-				// 	}
-				// } else {
-				// 	resultArr.pop();
-				// 	currentIndex--;
-				// }
-				
-				// quiz.flowControll(currentIndex);
-				// quiz.setQuestion(currentIndex);
+				if(quizDirection == 'btnNext'){
+					currentIndex++;
+					resultArr.push(currentAnswer);
+
+					//console.log(currentIndex, lastIndex - 1);
+					
+					// if (currentIndex > lastIndex - 1) {
+					// 	currentIndex = lastIndex;
+					// }
+
+					// if(currentAnswer != undefined && resultArr.length <= lastIndex-1){
+					// 	resultArr.push(currentAnswer);
+					// 	currentIndex++;
+					// }
+				} else {
+					resultArr.pop();
+					currentIndex--;
+				}
+				quiz.showQuestion(currentIndex);
 			},
 			showResult(result){
 				//resultArea.innerHTML = result
@@ -181,9 +168,6 @@
 				// 		console.log(index, qwe[index]);
 				// 	}
 				// });
-
-
-
 			},
 			btnEvent(){
 				quizButton.forEach(button => {
