@@ -68,6 +68,7 @@
 		const quizIndex			= quizContainer.querySelector(':scope > .quizArea > div');
 		const quizTitle			= quizContainer.querySelector(':scope > .quizArea h2');
 		const quizAnswer		= quizContainer.querySelector(':scope > .quizArea ul');
+		
 		const quizButton		= quizContainer.querySelectorAll(':scope > .btnArea > div button');
 		const resultArea		= quizContainer.querySelector(':scope > .resultArea .result');
 		const quizReset			= quizContainer.querySelector(':scope > .resultArea #btnReset');
@@ -89,7 +90,8 @@
 			showQuestion(index){
 				if (index == 0) {
 					quizContainer.classList = 'start';
-				} else if (index == lastIndex) {
+				} else if (index > lastIndex-1) {
+					index = lastIndex-1;
 					quizContainer.classList = 'result';
 					quiz.showResult(resultArr);
 				} else {
@@ -98,7 +100,7 @@
 
 				console.log(index, lastIndex);
 				if(questions[index] == undefined) {
-					return console.log('질문 번호 오류');
+					//return console.log('질문 번호 오류');
 				}
 
 				// 대상의 모든 자식을 제거
