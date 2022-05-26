@@ -74,8 +74,9 @@
 		const quizReset			= quizContainer.querySelector(':scope > .resultArea #btnReset');
 		let currentIndex		= 0;
 		let lastIndex				= questions.length;
-		let selectedAnswer	= null;
+		let selectedAnswer	= 0;
 		let resultArr				= [];
+		let flag						= false;
 
 		var quiz = {
 			init(){
@@ -88,6 +89,7 @@
 				quiz.showQuestion(currentIndex);
 			},
 			showQuestion(index){
+				// 인덱스에 따른 분기(버튼 노출,결과 표시)
 				if (index == 0) {
 					quizContainer.classList = 'start';
 				} else if (index > lastIndex-1) {
@@ -98,16 +100,14 @@
 					quizContainer.classList = '';
 				}
 
-				console.log(index, lastIndex);
-				if(questions[index] == undefined) {
-					//return console.log('질문 번호 오류');
-				}
-
 				// 대상의 모든 자식을 제거
-				while (quizAnswer.firstChild) {
-					quizAnswer.removeChild(quizAnswer.firstChild);
-				}
+				quizAnswer.innerHTML = '';
+				// 반복문은 비 효율적
+				// while (quizAnswer.firstChild) {
+				// 	quizAnswer.removeChild(quizAnswer.firstChild);
+				// }
 
+				// 현재 질문 인덱스 표시
 				let status = `<strong>${index+1}</strong> / <strong>${lastIndex}</strong>`
 				quizIndex.innerHTML = status;
 				
@@ -124,16 +124,26 @@
 				});
 			},
 			selectAnswer(answer, index){
+				// 선택한 답변 활성화, 인덱스 값 저장
 				let targetSiblings = answer.closest('ul').children;
 				Array.from(targetSiblings).forEach(el => el.classList.remove('selected'));
 				targetSiblings[index].classList.add('selected');
+
+				flag = true;
 				selectedAnswer = index;
+				//console.log(questions[currentIndex].answers[selectedAnswer].correct);
 			},
-			answerQuiz(target){			
+			answerQuiz(target){	
+				console.log(selectedAnswer, flag);
+				if(flag) {
+					console.log('ssss');
+				}
+
 				let quizDirection = target.className;
 				let currentAnswer = questions[currentIndex];
-				
-				//console.log(questions[currentIndex].answers[selectedAnswer].correct);
+				let isCorrect			= currentAnswer.answers[selectedAnswer].correct;
+
+				//console.log(isCorrect);
 
 				if(quizDirection == 'btnNext'){
 					currentIndex++;
@@ -154,6 +164,7 @@
 					currentIndex--;
 				}
 				quiz.showQuestion(currentIndex);
+				flag = false;
 			},
 			showResult(result){
 				//resultArea.innerHTML = result
@@ -182,7 +193,6 @@
 				});
 			}
 		}
-
 		quiz.init();
 	</script>
 </body>
