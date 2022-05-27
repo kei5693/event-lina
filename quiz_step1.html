@@ -23,7 +23,20 @@
 				</div>
 			</div>
 			<div class="resultArea">
-				<div class="result"></div>
+				<div class="result">
+					<p class="count">
+						정답을 맞춘 갯수 : <span></span>
+					</p>
+					<div class="info">
+						<p>정답을 맞춘 문제</p>
+						<!-- <ul>
+							<li><strong>번호</strong></li>
+							<li><strong>질문</strong></li>
+							<li><strong>선택지</strong></li>
+						</ul> -->
+						<div></div>
+					</div>
+				</div>
 				<button type="button" id="btnReset">Reset</button>
 			</div>
 		</div>
@@ -32,6 +45,7 @@
 	<script type="text/javascript">
 		const questions = [
 			{
+				id: 1,
 				question: 'What is 2 + 2?',
 				answers: [
 					{ text: '4',correct: true },
@@ -39,6 +53,7 @@
 				]
 			},
 			{
+				id: 2,
 				question: 'Who is the best YouTuber?',
 				answers: [
 					{ text: 'Web Dev Simplified', correct: true },
@@ -48,6 +63,7 @@
 				]
 			},
 			{
+				id: 3,
 				question: 'Is web development fun?',
 				answers: [
 					{ text: 'Kinda', correct: false },
@@ -57,6 +73,7 @@
 				]
 			},
 			{
+				id: 4,
 				question: 'What is 4 * 2?',
 				answers: [
 					{ text: '6', correct: false },
@@ -70,11 +87,13 @@
 		const quizAnswer		= quizContainer.querySelector(':scope > .quizArea ul');
 		
 		const quizButton		= quizContainer.querySelectorAll(':scope > .btnArea > div button');
-		const resultArea		= quizContainer.querySelector(':scope > .resultArea .result');
+		const quizCount			= quizContainer.querySelector(':scope > .resultArea .result > .count > span');
+		const quizResult		= quizContainer.querySelector(':scope > .resultArea .result > .info > div');
 		const quizReset			= quizContainer.querySelector(':scope > .resultArea #btnReset');
 		let currentIndex		= 0;
 		let lastIndex				= questions.length;
-		let selectedAnswer	= 0;
+		let selectedAnswer	= null;
+		let selectedArr				= [];
 		let resultArr				= [];
 		let flag						= false;
 
@@ -85,7 +104,10 @@
 			},
 			resetQuiz(){
 				currentIndex = 0;
+				selectedArr = [];
 				resultArr	= [];
+				quizCount.innerHTML = '';
+				quizResult.innerHTML = '';
 				quiz.showQuestion(currentIndex);
 			},
 			showQuestion(index){
@@ -95,7 +117,7 @@
 				} else if (index > lastIndex-1) {
 					index = lastIndex-1;
 					quizContainer.classList = 'result';
-					quiz.showResult(resultArr);
+					quiz.showResult();
 				} else {
 					quizContainer.classList = '';
 				}
@@ -131,56 +153,38 @@
 
 				flag = true;
 				selectedAnswer = index;
-				//console.log(questions[currentIndex].answers[selectedAnswer].correct);
 			},
-			answerQuiz(target){	
-				console.log(selectedAnswer, flag);
-				if(flag) {
-					console.log('ssss');
-				}
-
+			answerQuiz(target){
 				let quizDirection = target.className;
-				let currentAnswer = questions[currentIndex];
-				let isCorrect			= currentAnswer.answers[selectedAnswer].correct;
-
-				//console.log(isCorrect);
 
 				if(quizDirection == 'btnNext'){
+					if(flag == false) return console.log('선택값 없음');
+
+					selectedArr.push(selectedAnswer);
 					currentIndex++;
-					resultArr.push(currentAnswer);
-
-					//console.log(currentIndex, lastIndex - 1);
-					
-					// if (currentIndex > lastIndex - 1) {
-					// 	currentIndex = lastIndex;
-					// }
-
-					// if(currentAnswer != undefined && resultArr.length <= lastIndex-1){
-					// 	resultArr.push(currentAnswer);
-					// 	currentIndex++;
-					// }
 				} else {
-					resultArr.pop();
+					selectedArr.pop();
 					currentIndex--;
 				}
 				quiz.showQuestion(currentIndex);
 				flag = false;
 			},
-			showResult(result){
-				//resultArea.innerHTML = result
+			showResult(){
+				questions.forEach((el,index)=>{
+					if(el.answers[selectedArr[index]].correct){
+						//Object.assign(questions[index], { key: Number(`${index+1}`) });
+						resultArr.push(questions[index]);
+					}
+				});
 
-				let scoreArr = Object.values(result);
-				console.log(scoreArr);
+				quizCount.innerHTML = resultArr.length;
 
-				// let filteredArr = scoreArr.filter(function (el) {
-				// 	return el.correct != false;
-				// });
-
-				// let filteredArr2 = scoreArr.filter(function (el, index, qwe) {
-				// 	if(el.correct != false){
-				// 		console.log(index, qwe[index]);
-				// 	}
-				// });
+				resultArr.forEach((result, index) => {
+					let comma = index < resultArr.length-1 ? ', ' : '';
+					quizResult.innerHTML += `${result.id}` + comma;
+					//quizResult[0].innerHTML = '';
+				});
+				console.log(resultArr);
 			},
 			btnEvent(){
 				quizButton.forEach(button => {

@@ -59,4 +59,14 @@
 }
 #quizContainer.result > .resultArea {
   display: block;
+  font-size: 16px;
+}
+#quizContainer.result > .resultArea .result p {
+  font-weight: 700;
+}
+#quizContainer.result > .resultArea .result .info {
+  margin-top: 40px;
+}
+#quizContainer.result > .resultArea .result .info > div > ul + ul {
+  margin-top: 20px;
 }
