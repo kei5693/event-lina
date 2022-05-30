@@ -1,5 +1,9 @@
 ﻿@charset "utf-8";
 
+#wrap {
+  max-width: 375px;
+  margin: 0 auto;
+}
 #quizContainer {
   padding: 10px;
   font-size: 20px;
@@ -60,13 +64,4 @@
 #quizContainer.result > .resultArea {
   display: block;
   font-size: 16px;
-}
-#quizContainer.result > .resultArea .result p {
-  font-weight: 700;
-}
-#quizContainer.result > .resultArea .result .count {
-  margin-top: 20px;
-}
-#quizContainer.result > .resultArea .result .info > div > ul + ul {
-  margin-top: 20px;
 }

@@ -36,21 +36,21 @@ const questions = [
     ]
   }
 ];
-const quizContainer = document.querySelector('#quizContainer');
-const quizIndex			= quizContainer.querySelector(':scope > .quizArea > div');
-const quizTitle			= quizContainer.querySelector(':scope > .quizArea h2');
-const quizAnswer		= quizContainer.querySelector(':scope > .quizArea ul');
 
-const quizButton		= quizContainer.querySelectorAll(':scope > .btnArea > div button');
-const quizCount			= quizContainer.querySelector(':scope > .resultArea .result > .count > span');
-const quizResult		= quizContainer.querySelector(':scope > .resultArea .result > .info > div');
-const quizReset			= quizContainer.querySelector(':scope > .resultArea #btnReset');
-let currentIndex		= 0;
-let lastIndex				= questions.length;
-let selectedAnswer	= null;
-let selectedArr				= [];
-let resultArr				= [];
-let flag						= false;
+const quizContainer = document.querySelector('#quizContainer');                               // 퀴즈
+const quizIndex			= quizContainer.querySelector(':scope > .quizArea > div');                // 퀴즈 인덱스 표시
+const quizTitle			= quizContainer.querySelector(':scope > .quizArea h2');                   // 퀴즈 질문
+const quizAnswer		= quizContainer.querySelector(':scope > .quizArea ul');                   // 퀴즈 선택지
+const quizButton		= quizContainer.querySelectorAll(':scope > .btnArea > div button');       // 이전, 다음 버튼
+const quizResult		= quizContainer.querySelector(':scope > .resultArea > .question > span'); // 정답을 맞춘 문제
+const quizCount			= quizContainer.querySelector(':scope > .resultArea > .count > span');    // 정답을 맞춘 갯수
+const quizReset			= quizContainer.querySelector(':scope > .resultArea #btnReset');          // 리셋 버튼
+let currentIndex		= 0;                // 현재 퀴즈 인덱스
+let lastIndex				= questions.length; // 퀴즈 마지막 인덱스
+let selectedAnswer	= null;             // 선택한 선택지
+let selectedArr			= [];               // 선택한 선택지 배열
+let resultArr				= [];               // 정답을 맞춘 퀴즈 배
+let flag						= false;            // 선택지를 선택 했는지 여부
 
 var quiz = {
   init(){
@@ -61,8 +61,8 @@ var quiz = {
     currentIndex = 0;
     selectedArr = [];
     resultArr	= [];
-    quizCount.innerHTML = '';
     quizResult.innerHTML = '';
+    quizCount.innerHTML = '';
     quiz.showQuestion(currentIndex);
   },
   showQuestion(index){
@@ -132,14 +132,14 @@ var quiz = {
       }
     });
 
-    quizCount.innerHTML = resultArr.length;
-
     resultArr.forEach((result, index) => {
       let comma = index < resultArr.length-1 ? ', ' : '';
       quizResult.innerHTML += `${result.id}` + comma;
       //quizResult[0].innerHTML = '';
     });
     console.log(resultArr);
+
+    quizCount.innerHTML = resultArr.length;
   },
   btnEvent(){
     quizButton.forEach(button => {
