@@ -1,0 +1,47 @@
+﻿@charset "utf-8";
+
+html, body {height: 100%;}
+body {background-color: #000;}
+
+#wrap {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#scratchContainer {
+  position: relative;
+  /* width: 300px;
+  height: 300px; */
+
+  user-select: none;
+
+  background-color: yellow;
+  border: 5px solid red;
+  box-shadow: inset 0 0 10px #000000;
+}
+
+#scratchContainer .canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  transition: opacity 0.8s cubic-bezier(0.25, 0.66, 1, 1);
+}
+#scratchContainer .canvas.hidden {
+  opacity: 0;
+}
+#scratchContainer .inner_content {
+  height: 100%;
+  visibility: hidden;
+}
+#scratchContainer .inner_content.visible {
+  height: 100%;
+  visibility: visible;
+}
+#scratchContainer .inner_content img:first-child {
+  display: block;
+  width: 100%;
+}
