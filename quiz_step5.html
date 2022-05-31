@@ -90,18 +90,115 @@
 				quiz.showQuestion(currentIndex);
 				quiz.btnEvent();
 			},
+			resetQuiz(){
+				currentIndex = 0;
+				selectedArr = [];
+				quiz.showQuestion(currentIndex);
+			},
 			showQuestion(index){
-				console.log(questions[currentIndex]);
+				//console.log(questions[currentIndex]);
+
+				// 인덱스에 따른 분기(버튼 노출,결과 표시)
+				if (index == 0) {
+					quizContainer.classList = 'start';
+				} else if (index > lastIndex-1) {
+					index = lastIndex-1;
+					quizContainer.classList = 'result';
+					quiz.showResult();
+				} else {
+					quizContainer.classList = '';
+				}
+
+				// 대상의 모든 자식을 제거
+				quizAnswer.innerHTML = '';
+				// 반복문은 비 효율적
+				// while (quizAnswer.firstChild) {
+				// 	quizAnswer.removeChild(quizAnswer.firstChild);
+				// }
+
+				// 현재 질문 인덱스 표시
+				let status = `<strong>${index+1}</strong> / <strong>${lastIndex}</strong>`
+				quizIndex.innerHTML = status;
+				
+				// 퀴즈 텍스트 변경
+				quizTitle.innerText = questions[index].question;
+				// 퀴즈 선택지 생성, 선택지 클릭 이벤트
+				questions[index].answers.forEach((answer,index) => {
+					const li = document.createElement('li');
+					const button  = document.createElement('button');
+
+					button.innerText = answer.text;
+					button.addEventListener('click', (e)=> {quiz.selectAnswer(e.target, index)});
+					quizAnswer.appendChild(li).appendChild(button);
+				});
+			},
+			selectAnswer(answer, index){
+				// 선택한 답변 활성화, 인덱스 값 저장
+				//let targetSiblings = answer.closest('ul').children;
+				//Array.from(targetSiblings).forEach(el => el.classList.remove('selected'));
+				//targetSiblings[index].classList.add('selected');
+
+				// function siblings(answer) {
+				//   return Array.from(answer.closest('ul').children).filter(function(el) {
+				//     return el != answer ? el.classList.remove('selected') : el.classList.add('selected');
+				//   });
+				// }
+				// siblings(answer.closest('li'));
+
+				// Array.prototype.slice.call
+				// Array.from 둘다 얕은 복사
+
+				// function siblings(target) {
+				//   return Array.from(answer.closest('ul').children).filter(function(el) {
+				//     return el != target ? el.classList.remove('selected') : el.classList.add('selected');
+				//   });
+				// }
+				// siblings(answer.closest('li'));
+
+				let target = answer.closest('li');
+				let targetParent = answer.closest('ul').children;
+				Array.from(targetParent).filter(function(el) {
+					return el != target.closest('li') ? el.classList.remove('selected') : el.classList.add('selected');
+				});
+
+				flag = true;
+				selectedAnswer = index;
 			},
 			answerQuiz(target){
 				let quizDirection = target.className;
 
 				if(quizDirection == 'btnNext'){
+					if(flag == false) return console.log('선택값 없음');
+
+					selectedArr.push(selectedAnswer);
 					currentIndex++;
 				} else {
+					selectedArr.pop();
 					currentIndex--;
 				}
-				console.log(quizDirection, currentIndex, questions[currentIndex]);
+				quiz.showQuestion(currentIndex);
+				flag = false;
+				console.log(selectedArr);
+			},
+			showResult(){
+				// questions.forEach((el,index)=>{
+				// 	if(el.answers[selectedArr[index]].correct){
+				// 		//Object.assign(questions[index], { key: Number(`${index+1}`) });
+				// 		resultArr.push(questions[index]);
+				// 	}
+				// });
+
+				questions.filter((el,index)=>{
+					return el.answers[selectedArr[index]].correct ? resultArr.push(questions[index]) : '';
+				});
+				console.log(resultArr);
+
+				resultArr.forEach((result, index) => {
+					let comma = index < resultArr.length-1 ? ', ' : '';
+					quizResult.innerHTML += `${result.id}` + comma;
+				});
+
+				quizCount.innerHTML = resultArr.length;
 			},
 			btnEvent(){
 				quizButton.forEach(button => {
@@ -111,6 +208,7 @@
 				});
 				quizReset.addEventListener('click', () => {
 					console.log('reset');
+					quiz.resetQuiz();
 				});
 			}
 		}

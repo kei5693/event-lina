@@ -102,9 +102,32 @@ var quiz = {
   },
   selectAnswer(answer, index){
     // 선택한 답변 활성화, 인덱스 값 저장
-    let targetSiblings = answer.closest('ul').children;
-    Array.from(targetSiblings).forEach(el => el.classList.remove('selected'));
-    targetSiblings[index].classList.add('selected');
+    //let targetSiblings = answer.closest('ul').children;
+    //Array.from(targetSiblings).forEach(el => el.classList.remove('selected'));
+    //targetSiblings[index].classList.add('selected');
+
+    // function siblings(answer) {
+    //   return Array.from(answer.closest('ul').children).filter(function(el) {
+    //     return el != answer ? el.classList.remove('selected') : el.classList.add('selected');
+    //   });
+    // }
+    // siblings(answer.closest('li'));
+
+    // Array.prototype.slice.call
+    // Array.from 둘다 얕은 복사
+
+    // function siblings(target) {
+    //   return Array.from(answer.closest('ul').children).filter(function(el) {
+    //     return el != target ? el.classList.remove('selected') : el.classList.add('selected');
+    //   });
+    // }
+    // siblings(answer.closest('li'));
+
+    let target = answer.closest('li');
+    let targetParent = answer.closest('ul').children;
+    Array.from(targetParent).filter(function(el) {
+      return el != target.closest('li') ? el.classList.remove('selected') : el.classList.add('selected');
+    });
 
     flag = true;
     selectedAnswer = index;
@@ -125,11 +148,15 @@ var quiz = {
     flag = false;
   },
   showResult(){
-    questions.forEach((el,index)=>{
-      if(el.answers[selectedArr[index]].correct){
-        //Object.assign(questions[index], { key: Number(`${index+1}`) });
-        resultArr.push(questions[index]);
-      }
+    // questions.forEach((el,index)=>{
+    //   if(el.answers[selectedArr[index]].correct){
+    //     //Object.assign(questions[index], { key: Number(`${index+1}`) });
+    //     resultArr.push(questions[index]);
+    //   }
+    // });
+
+    questions.filter((el,index)=>{
+      return el.answers[selectedArr[index]].correct ? resultArr.push(questions[index]) : '';
     });
 
     resultArr.forEach((result, index) => {
