@@ -6,7 +6,7 @@ var isDrawing,
 var scratchContainer	= document.getElementById('scratchContainer'),
 		canvas						= document.getElementById('canvasEl');
 
-setCanvasSize(scratchContainer, 0.5);
+setCanvasSize(scratchContainer, 0.8);
 function setCanvasSize(target, width) {
 	let limit = 500;
 	let value = document.querySelector('body').clientWidth * width;
@@ -15,6 +15,8 @@ function setCanvasSize(target, width) {
 	}
 	target.style.width = value + 'px';
 	target.style.height = value + 'px';
+
+	console.log(value);
 
 	canvas.setAttribute("width", value);
 	canvas.setAttribute("height", value);
@@ -129,6 +131,6 @@ function handleMouseUp(e) {
 }
 
 window.addEventListener('resize', function(){
-	setCanvasSize(scratchContainer, 0.5);
+	setCanvasSize(scratchContainer, 0.8);
 	ctx.drawImage(image, 0, 0, scratchContainer.clientWidth, scratchContainer.clientWidth);
 });
