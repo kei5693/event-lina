@@ -6,7 +6,7 @@ var isDrawing,
 var scratchContainer	= document.getElementById('scratchContainer'),
 		canvas						= document.getElementById('canvasEl');
 
-setCanvasSize(scratchContainer, 0.3);
+setCanvasSize(scratchContainer, 0.5);
 function setCanvasSize(target, width) {
 	let limit = 500;
 	let value = document.querySelector('body').clientWidth * width;
@@ -129,6 +129,6 @@ function handleMouseUp(e) {
 }
 
 window.addEventListener('resize', function(){
-	setCanvasSize(scratchContainer, 0.3);
+	setCanvasSize(scratchContainer, 0.5);
 	ctx.drawImage(image, 0, 0, scratchContainer.clientWidth, scratchContainer.clientWidth);
 });
