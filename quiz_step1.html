@@ -69,7 +69,6 @@
 				]
 			}
 		];
-			
 		const quizContainer = document.querySelector('#quizContainer');                               // 퀴즈
 		const quizIndex			= quizContainer.querySelector(':scope > .quizArea > div');                // 퀴즈 인덱스 표시
 		const quizTitle			= quizContainer.querySelector(':scope > .quizArea h2');                   // 퀴즈 질문
@@ -82,7 +81,7 @@
 		let lastIndex				= questions.length; // 퀴즈 마지막 인덱스
 		let selectedAnswer	= null;             // 선택한 선택지
 		let selectedArr			= [];               // 선택한 선택지 배열
-		let resultArr				= [];               // 정답을 맞춘 퀴즈 배
+		let resultArr				= [];               // 정답을 맞춘 퀴즈 배열
 		let flag						= false;            // 선택지를 선택 했는지 여부
 
 		var quiz = {

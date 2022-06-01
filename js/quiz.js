@@ -58,11 +58,11 @@ var quiz = {
     quiz.btnEvent();
   },
   resetQuiz(){
-    currentIndex = 0;
     selectedArr = [];
     resultArr	= [];
     quizResult.innerHTML = '';
     quizCount.innerHTML = '';
+    currentIndex = 0;
     quiz.showQuestion(currentIndex);
   },
   showQuestion(index){
@@ -77,6 +77,13 @@ var quiz = {
       quizContainer.classList = '';
     }
 
+    // 현재 질문 인덱스 표시
+    let status = `<strong>${index+1}</strong> / <strong>${lastIndex}</strong>`
+    quizIndex.innerHTML = status;
+    
+    // 퀴즈 텍스트 변경
+    quizTitle.innerHTML = questions[index].question;
+
     // 대상의 모든 자식을 제거
     quizAnswer.innerHTML = '';
     // 반복문은 비 효율적
@@ -84,18 +91,12 @@ var quiz = {
     // 	quizAnswer.removeChild(quizAnswer.firstChild);
     // }
 
-    // 현재 질문 인덱스 표시
-    let status = `<strong>${index+1}</strong> / <strong>${lastIndex}</strong>`
-    quizIndex.innerHTML = status;
-    
-    // 퀴즈 텍스트 변경
-    quizTitle.innerText = questions[index].question;
     // 퀴즈 선택지 생성, 선택지 클릭 이벤트
     questions[index].answers.forEach((answer,index) => {
       const li = document.createElement('li');
       const button  = document.createElement('button');
 
-      button.innerText = answer.text;
+      button.innerHTML = answer.text;
       button.addEventListener('click', (e)=> {quiz.selectAnswer(e.target, index)});
       quizAnswer.appendChild(li).appendChild(button);
     });
@@ -126,7 +127,7 @@ var quiz = {
     let target = answer.closest('li');
     let targetParent = answer.closest('ul').children;
     Array.from(targetParent).filter(function(el) {
-      return el != target.closest('li') ? el.classList.remove('selected') : el.classList.add('selected');
+      return el == target.closest('li') ? el.classList.add('selected') : el.classList.remove('selected');
     });
 
     flag = true;
@@ -148,25 +149,23 @@ var quiz = {
     flag = false;
   },
   showResult(){
-    // questions.forEach((el,index)=>{
-    //   if(el.answers[selectedArr[index]].correct){
-    //     //Object.assign(questions[index], { key: Number(`${index+1}`) });
-    //     resultArr.push(questions[index]);
-    //   }
-    // });
-
-    questions.filter((el,index)=>{
-      return el.answers[selectedArr[index]].correct ? resultArr.push(questions[index]) : '';
+    questions.forEach((el,index)=>{
+      if(el.answers[selectedArr[index]].correct){
+        //Object.assign(questions[index], { key: Number(`${index+1}`) });
+        resultArr.push(el);
+      }
     });
+
+    // questions.filter((el,index)=>{
+    //   el.answers[selectedArr[index]].correct ? resultArr.push(el) : '';
+    // });
 
     resultArr.forEach((result, index) => {
       let comma = index < resultArr.length-1 ? ', ' : '';
       quizResult.innerHTML += `${result.id}` + comma;
-      //quizResult[0].innerHTML = '';
     });
-    console.log(resultArr);
-
     quizCount.innerHTML = resultArr.length;
+    console.log(resultArr);
   },
   btnEvent(){
     quizButton.forEach(button => {

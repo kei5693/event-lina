@@ -91,10 +91,10 @@
 				quiz.btnEvent();
 			},
 			showQuestion(index){
-				console.log(questions[currentIndex]);
+				console.log(questions[index]);
 			},
 			answerQuiz(target){
-				let quizDirection = target.className;
+				let quizDirection = target;
 
 				if(quizDirection == 'btnNext'){
 					currentIndex++;
@@ -106,7 +106,7 @@
 			btnEvent(){
 				quizButton.forEach(button => {
 					button.addEventListener('click', (e) => {
-						quiz.answerQuiz(e.target);
+						quiz.answerQuiz(e.target.className);
 					});
 				});
 				quizReset.addEventListener('click', () => {
