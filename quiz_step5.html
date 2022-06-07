@@ -183,16 +183,16 @@
 				console.log(selectedArr);
 			},
 			showResult(){
-				// questions.forEach((el,index)=>{
-				// 	if(el.answers[selectedArr[index]].correct){
-				// 		//Object.assign(questions[index], { key: Number(`${index+1}`) });
-				// 		resultArr.push(el);
-				// 	}
-				// });
-
-				questions.filter((el,index)=>{
-					el.answers[selectedArr[index]].correct ? resultArr.push(el) : '';
+				questions.forEach((el,index)=>{
+					if(el.answers[selectedArr[index]].correct){
+						//Object.assign(questions[index], { key: Number(`${index+1}`) });
+						resultArr.push(el);
+					}
 				});
+
+				// questions.filter((el,index)=>{
+				// 	el.answers[selectedArr[index]].correct ? resultArr.push(el) : '';
+				// });
 
 				resultArr.forEach((result, index) => {
 					let comma = index < resultArr.length-1 ? ', ' : '';
